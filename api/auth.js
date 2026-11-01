@@ -105,6 +105,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true, name: whitelist[normalEmail] || '' });
   } catch (err) {
     console.error('[auth]', err);
-    return res.status(500).json({ ok: false, error: 'Server error. Please try again.' });
+    return res.status(500).json({ ok: false, error: 'Server error: ' + (err.message || String(err)) });
   }
 }
