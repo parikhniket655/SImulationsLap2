@@ -210,7 +210,7 @@ const fmt=n=>Math.floor(n/60)+':'+String(n%60).padStart(2,'0');
 const wc=s=>s&&s.trim()?s.trim().split(/\s+/).length:0;
 const hs=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return(h>>>0).toString(36)};
 const sum=a=>(a||[]).reduce((s,x)=>s+(+x||0),0);
-const st={sc:0,ph:'',q:0,team:'',code:'',t0:0,end:0,log:[],a:{},pk:{},m:[60,60,60,60],mp:[60,60,60,60],hp:100,fx:'',en:0,dos:0,err:'',tid:null,out:'',chips:'',last:0,dsum:0};
+const st={sc:0,ph:'',q:0,team:'',email:'',t0:0,end:0,log:[],a:{},pk:{},m:[60,60,60,60],mp:[60,60,60,60],hp:100,fx:'',en:0,dos:0,err:'',tid:null,out:'',chips:'',last:0,dsum:0,submitting:false};
 function L(k,v){st.log.push([Math.round((Date.now()-st.t0)/1000),k,v])}
 function bg(){let h='';for(let i=0;i<40;i++)h+=`<i class="st" style="left:${Math.random()*100}%;top:${Math.random()*70}%;animation-delay:${Math.random()*3}s"></i>`;for(let i=0;i<5;i++)h+=`<i class="cl" style="top:${8+i*16}%;animation-duration:${50+i*18}s;animation-delay:-${i*14}s"></i>`;const jet='<svg viewBox="0 0 80 30"><path d="M2 15L30 12L52 2L58 2L48 12L74 13L78 15L74 17L48 18L58 28L52 28L30 18Z" fill="#cfe6ff"/></svg>';for(let i=0;i<3;i++)h+=`<div class="jet" style="top:${12+i*22}%;animation-duration:${22+i*9}s;animation-delay:-${i*8}s">${jet}</div>`;$('#bg').innerHTML=h}
 const say=(w,tag,txt)=>`<div class="say"><div class="pt">${w=='q'?QUEEN:CMD}</div><div class="bub"><i>${tag}</i>${txt}</div></div>`;
@@ -228,9 +228,9 @@ function qcard(){const q=QS[st.q],n=st.q+1,id='q'+n,v=st.a[id];let b='';
  if(q.t=='w')b=`<textarea data-w="60" data-q="memo" aria-label="Memo">${E(st.a.memo)}</textarea><div class="k" id="wcm">${wc(st.a.memo)} / 60 words</div>`;
  return `<div class="card"><div class="k">${n==NQ+1?'FINAL MEMO · 12 MARKS (JUDGED)':'TRIAL '+n+' OF '+NQ+' · '+q.m+' MARKS'}</div><h2>${q.h}</h2><p style="margin:0 0 8px">${q.q}</p>${b}${st.err?`<p style="color:#ff9b9b">${st.err}</p>`:''}<div class="row"><span class="k">Numbers are in the case file</span><button class="p" data-a="sub">${q.t=='w'?'Send memo and face the final blow':'Strike with this answer'}</button></div></div>`}
 function main(){const q=st.q<=NQ?QS[st.q]:0,ph=st.ph,r=RD[Math.min(3,q?q.r:3)];
- if(st.sc==0)return `<div class="arena"><div class="fg L enter">${CMD}COMMANDER</div><div class="fg R enter">${titan(0)}CRONUS</div></div><div class="card" style="text-align:center"><div class="k">WAZIR · COTY 2027 ROUND 2</div><h1>TRIAL OF TITANS</h1><p>Eight decisions. Eight crises. Fifteen minutes. IndiGo, India’s largest airline, in a hard year. Four Titans stand between you and the skies. Marks are hidden.</p><div style="max-width:380px;margin:12px auto;text-align:left"><label for="tn">Team name</label><input id="tn" maxlength="30" autocomplete="off"><label for="tc" style="display:block;margin-top:8px">Team code</label><input id="tc" maxlength="12" autocomplete="off"></div><button class="p" data-a="enter">Begin the trial</button></div>`;
+ if(st.sc==0)return `<div class="arena"><div class="fg L enter">${CMD}COMMANDER</div><div class="fg R enter">${titan(0)}CRONUS</div></div><div class="card" style="text-align:center"><div class="k">WAZIR · COTY 2027 ROUND 2</div><h1>TRIAL OF TITANS</h1><p>Eight decisions. Eight crises. Fifteen minutes. IndiGo, India’s largest airline, in a hard year. Four Titans stand between you and the skies. Marks are hidden.</p><div style="max-width:380px;margin:12px auto;text-align:left"><label for="tn">Full name</label><input id="tn" maxlength="60" autocomplete="name" placeholder="Your full name"><label for="te" style="display:block;margin-top:8px">Registered email</label><input id="te" type="email" maxlength="80" autocomplete="email" placeholder="you@example.com"></div><div id="enter-err" style="color:#ff9b9b;font-size:13px;margin:6px 0;min-height:18px"></div><button class="p" data-a="enter" id="enter-btn">Verify &amp; Begin →</button></div>`;
  if(st.sc==1)return say('q','THE QUEEN OF ITHACA','Commander, for years IndiGo has been India’s clear market leader: 65% of domestic passengers in August 2026 and the most punctual of the big carriers. Yet FY26 ended in a reported loss, fuel costs have jumped, and December 2025 still shapes how passengers and crew feel. The Board has appointed your team as external consultants. Recommend decisions that restore profitability and trust over 12 months.')+`<div class="card"><div class="k">HOW THE TRIAL WORKS</div><ul style="margin:6px 0 0;padding-left:20px"><li>One team, one answer per question. Use only the casebook and the dossier.</li><li>After every answer a <b>crisis twist</b> arrives. Pick your response. Earlier choices change what a twist means.</li><li>The four meters show consequences, not marks. Calculators allowed. 1 crore = 10 million.</li><li>The whole simulation closes automatically at <b>15 minutes</b>.</li><li>Market data is public (to Oct 2026). Route data and the ₹1,000 crore fund are illustrative. A student simulation, not endorsed by the company.</li></ul><div class="row"><span></span><button class="p" data-a="go1">Start the clock</button></div></div>`;
- if(st.sc==3)return `<div class="card" style="text-align:center"><div class="k">${st.good?'THE SKIES HOLD':'THE TITANS PRESS ON'}</div><h2>${st.good?'The Titans retreat. Olympus keeps the skies.':'The Titans are driven back, but the war is not over.'}</h2><p>Time taken: ${fmt(Math.round((st.end-st.t0)/1000))}. The judges will announce the Consultant of the Year at the ceremony. Copy your seal and give it to the organisers. Do not close this page until they confirm.</p><textarea id="sc" readonly style="min-height:90px">${st.out}</textarea><div class="row" style="justify-content:center"><span id="cp"></span><button class="p" data-a="copy">Copy seal</button></div></div>`;
+ if(st.sc==3)return `<div class="card" style="text-align:center"><div class="k">${st.good?'THE SKIES HOLD':'THE TITANS PRESS ON'}</div><h2>${st.good?'The Titans retreat. Olympus keeps the skies.':'The Titans are driven back, but the war is not over.'}</h2><p>Time taken: <b>${fmt(Math.round((st.end-st.t0)/1000))}</b>. Your answers have been submitted automatically. The judges will announce the Consultant of the Year at the ceremony.</p><p style="margin-top:8px;font-size:13px;opacity:.7">Submitted as: <b>${E(st.email)}</b></p></div>`;
  if(ph=='ri')return say('q','ROUND '+(q.r+1)+' · '+r.n.toUpperCase(),r.l+` <b>${r.t}</b>, ${r.s}, enters the field.`)+`<div class="row"><span></span><button class="p" data-a="face">Face ${r.t}</button></div>`;
  if(ph=='q')return qcard();
  if(ph=='bt')return say('c','THE COMMANDER','Striking now…')+'<div class="alert" style="margin-top:12px">COMMITTING</div>';
@@ -247,11 +247,29 @@ function chk(){const q=QS[st.q],id='q'+(st.q+1),v=q.t=='w'?st.a.memo:st.a[id];
  if(q.t=='b'&&sum(v)!=1000)return 'The allocation must total exactly ₹1,000 crore (now ₹'+sum(v)+').';
  if(q.t=='w'&&(!(v||'').trim()||wc(v)>60))return 'Write a memo of 60 words or fewer.';return ''}
 function fin(to){if(st.sc==3)return;if(to)L('timeout',1);L('end',1);st.end=Date.now();clearInterval(st.tid);st.good=sum(st.m)/4>=60;
- const j=JSON.stringify({t:st.team,c:st.code,s:new Date(st.t0).toISOString(),e:new Date(st.end).toISOString(),x:Math.round((st.end-st.t0)/1000),l:st.log});
- st.out=btoa(unescape(encodeURIComponent(j)))+'.'+hs(j+'tot27c');st.sc=3;st.fx='';render();scrollTo(0,0)}
+ const j=JSON.stringify({t:st.team,c:st.email,s:new Date(st.t0).toISOString(),e:new Date(st.end).toISOString(),x:Math.round((st.end-st.t0)/1000),l:st.log});
+ st.out=btoa(unescape(encodeURIComponent(j)))+'.'+hs(j+'tot27c');st.sc=3;st.fx='';render();scrollTo(0,0);
+ // Auto-submit to backend
+ const ans={};[1,2,3,4,5,6,7,8].forEach(i=>{const v=st.a['q'+i];if(v!==undefined)ans['q'+i]=v;if(st.a['q'+i+'w'])ans['q'+i+'w']=st.a['q'+i+'w'];});ans.memo=st.a.memo||'';
+ const crises={};st.log.filter(e=>e[1]&&String(e[1]).startsWith('tw')).forEach(e=>{crises[e[1]]=e[2]-1;});
+ fetch('/api/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:st.email,name:st.team,answers:ans,crises:crises,meters:st.m,log:st.log,startTime:new Date(st.t0).toISOString(),endTime:new Date(st.end).toISOString(),timeTakenSeconds:Math.round((st.end-st.t0)/1000)})}).catch(()=>{});
+}
 function enterQ(){const q=QS[st.q];st.ph=st.q%2==0&&st.q<NQ?'ri':'q';if(st.ph=='ri'){st.hp=100;st.en=1}else if(st.q==12)st.en=0;st.fx='';st.err=''}
 const A={
- enter(){const n=$('#tn').value.trim();if(!n){$('#tn').focus();return}st.team=n;st.code=$('#tc').value.trim();go(()=>{st.sc=1})},
+ enter(){
+  const n=$('#tn').value.trim(),e=($('#te').value||'').trim().toLowerCase();
+  if(!n){$('#tn').focus();document.getElementById('enter-err').textContent='Please enter your name.';return}
+  if(!e||!e.includes('@')){$('#te').focus();document.getElementById('enter-err').textContent='Please enter your registered email.';return}
+  const btn=document.getElementById('enter-btn');btn.disabled=true;btn.textContent='Verifying…';
+  document.getElementById('enter-err').textContent='';
+  fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})})
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.ok){st.team=n;st.email=e;go(()=>{st.sc=1})}
+      else{document.getElementById('enter-err').textContent=d.error||'Access denied.';btn.disabled=false;btn.textContent='Verify & Begin →';}
+    })
+    .catch(()=>{document.getElementById('enter-err').textContent='Network error. Please try again.';btn.disabled=false;btn.textContent='Verify & Begin →';});
+},
  go1(){st.t0=Date.now();L('start',1);st.tid=setInterval(tick,1000);go(()=>{st.sc=2;st.q=0;enterQ()})},
  face(){go(()=>{st.ph='q'})},
  dos(){st.dos=!st.dos;const y=scrollY;render();scrollTo(0,y)},

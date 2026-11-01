@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trial of Titans · Organiser Console</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--b1:#030b1f;--b2:#0a2a6b;--b3:#1d6fff;--ice:#9fd0ff;--gold:#7fe0ff;--danger:#ff6b72}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(ellipse at 50% -10%,#1a4fc7 0%,#0a2a6b 35%,#030b1f 80%) fixed;color:#fff;font:15px/1.5 Lato,Arial,sans-serif;min-height:100vh}
+#app{max-width:1300px;margin:0 auto;padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;border-bottom:1px solid rgba(159,208,255,.25);padding-bottom:14px;margin-bottom:16px}
+.brand{font-family:Cinzel,serif;font-weight:700;font-size:20px;letter-spacing:3px}
+.brand small{display:block;font:400 11px Lato,sans-serif;letter-spacing:2px;color:var(--gold)}
+.k{font-size:11px;letter-spacing:2px;color:var(--gold)}
+button{min-height:38px;padding:0 16px;border:1px solid rgba(159,208,255,.5);border-radius:4px;background:#0a1f4b;color:#fff;font:700 13px Lato,Arial,sans-serif;cursor:pointer;transition:.15s}
+button:hover:not(:disabled){background:#1d6fff}
+button.p{background:linear-gradient(#2a6be0,#164aa8);border-color:#9fd0ff}
+button:disabled{opacity:.4;cursor:default}
+.card{background:rgba(5,20,55,.82);border:1px solid rgba(159,208,255,.25);border-radius:8px;padding:18px;margin-bottom:14px;backdrop-filter:blur(4px)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:rgba(10,42,107,.6);border:1px solid rgba(159,208,255,.2);border-radius:6px;padding:14px;text-align:center}
+.stat b{display:block;font-family:Cinzel,serif;font-size:26px;color:var(--gold)}
+table{border-collapse:collapse;width:100%;min-width:800px}
+th{font-size:11px;letter-spacing:1.5px;color:var(--gold);padding:8px 10px;border-bottom:1px solid rgba(159,208,255,.25);text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:#fff}
+td{padding:8px 10px;border-bottom:1px solid rgba(159,208,255,.1);font-size:13px;white-space:nowrap;vertical-align:middle}
+tr.clickable{cursor:pointer}
+tr.clickable:hover td,tr.selected td{background:rgba(29,111,255,.15)}
+.rank{font-family:Cinzel,serif;font-size:16px;font-weight:700;color:var(--gold)}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;letter-spacing:1px;font-weight:700}
+.badge.done{background:#0e3a14;color:#6dffa0;border:1px solid #2a7a40}
+.badge.inprog{background:#1a2e00;color:#b8ff50;border:1px solid #4a6a10}
+.badge.pending{background:#1a1a2e;color:#888;border:1px solid #333}
+input[type=number],input[type=text],input[type=password]{padding:8px 10px;border-radius:4px;border:1px solid rgba(159,208,255,.4);background:rgba(3,11,31,.8);color:#fff;font:14px Lato,Arial,sans-serif;width:100%}
+.sc{overflow-x:auto}
+/* Login overlay */
+#login{position:fixed;inset:0;background:rgba(3,11,31,.97);z-index:100;display:flex;align-items:center;justify-content:center}
+.login-box{background:rgba(5,20,55,.95);border:1px solid rgba(159,208,255,.3);border-radius:10px;padding:32px;width:100%;max-width:380px;text-align:center}
+.login-box h1{font-family:Cinzel,serif;font-size:22px;letter-spacing:3px;margin-bottom:20px}
+.login-box label{display:block;text-align:left;margin-bottom:14px}
+.login-box label span{display:block;font-size:11px;letter-spacing:1px;color:var(--gold);margin-bottom:4px}
+.err{color:var(--danger);font-size:13px;margin-top:10px;min-height:20px}
+/* Drawer */
+#drawer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;overflow:auto}
+#drawer-inner{background:#060e25;border-left:1px solid rgba(159,208,255,.2);position:absolute;right:0;top:0;bottom:0;width:min(700px,100%);padding:24px;overflow:auto}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.ans-block{background:rgba(3,11,31,.7);border:1px solid rgba(159,208,255,.15);border-radius:6px;padding:12px;margin-bottom:10px;font-size:13px}
+.ans-block .lbl{font-size:10px;letter-spacing:2px;color:var(--gold);display:block;margin-bottom:4px}
+.ans-block .val{word-break:break-word;white-space:pre-wrap}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin:12px 0}
+.score-box{background:rgba(10,42,107,.6);border-radius:6px;padding:10px;text-align:center}
+.score-box b{display:block;font-family:Cinzel,serif;font-size:18px;color:var(--gold)}
+.score-box span{font-size:11px;letter-spacing:1px}
+.tl{list-style:none;border-left:2px solid rgba(159,208,255,.25);padding-left:14px;margin-top:8px}
+.tl li{padding:3px 0;font-size:12px;color:rgba(255,255,255,.75)}
+.tl li time{display:inline-block;width:50px;color:var(--gold);font-variant-numeric:tabular-nums}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.refresh-hint{font-size:12px;color:rgba(255,255,255,.4)}
+</style>
+</head>
+<body>
+
+<!-- Login screen -->
+<div id="login">
+  <div class="login-box">
+    <h1>ORGANISER<br>CONSOLE</h1>
+    <p style="font-size:13px;opacity:.7;margin-bottom:20px">Trial of Titans · Wazir COTY 2027</p>
+    <label>
+      <span>ADMIN PASSWORD</span>
+      <input type="password" id="pw" placeholder="Enter password" autocomplete="current-password">
+    </label>
+    <button class="p" style="width:100%;margin-top:6px" onclick="doLogin()">Enter Console</button>
+    <div class="err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- Main app -->
+<div id="app" style="display:none">
+  <div class="top">
+    <div class="brand">TRIAL OF TITANS <small>ORGANISER CONSOLE · PRIVATE</small></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="refresh-hint" id="last-refresh">Never refreshed</span>
+      <button onclick="load()">↻ Refresh</button>
+      <button onclick="exportCSV()">Export CSV</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats">
+    <div class="stat"><b id="s-total">–</b>Registered</div>
+    <div class="stat"><b id="s-started">–</b>Started</div>
+    <div class="stat"><b id="s-finished">–</b>Finished</div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="card">
+    <div class="k" style="margin-bottom:10px">LEADERBOARD — click a row for details & memo grading</div>
+    <div class="sc">
+      <table id="lb">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>NAME / EMAIL</th>
+            <th>STATUS</th>
+            <th onclick="sortBy('total_score')" title="Click to sort">TOTAL ▾</th>
+            <th onclick="sortBy('auto_score')">AUTO /88</th>
+            <th>MEMO /12</th>
+            <th onclick="sortBy('time_taken_seconds')">TIME</th>
+            <th>SUBMITTED</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p id="empty" style="text-align:center;padding:24px;opacity:.5;display:none">No submissions yet.</p>
+  </div>
+</div>
+
+<!-- Drawer -->
+<div id="drawer" onclick="closeDrawer(event)">
+  <div id="drawer-inner">
+    <div class="drawer-head">
+      <span class="brand" style="font-size:16px" id="d-name">–</span>
+      <button onclick="closeDrawer(null)">✕ Close</button>
+    </div>
+    <div id="d-content"></div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let ADMIN_PASS = '';
+let submissions = [];
+let sortKey = 'total_score';
+let sortDir = -1; // -1 = desc
+
+// Extract URL key from query param
+const urlParams = new URLSearchParams(location.search);
+const URL_KEY = urlParams.get('key') || '';
+
+// ── Login ──────────────────────────────────────────────────────────────────
+document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogin() {
+  const pw = document.getElementById('pw').value.trim();
+  if (!pw) { showLoginErr('Enter the admin password.'); return; }
+  ADMIN_PASS = pw;
+  load().then(ok => {
+    if (ok) {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    }
+  });
+}
+
+function showLoginErr(msg) {
+  document.getElementById('login-err').textContent = msg;
+}
+
+// ── API calls ──────────────────────────────────────────────────────────────
+function apiHeaders() {
+  return { 'Content-Type': 'application/json', 'x-admin-pass': ADMIN_PASS };
+}
+
+async function load() {
+  try {
+    const res = await fetch('/api/admin?key=' + encodeURIComponent(URL_KEY), { headers: apiHeaders() });
+    if (res.status === 401) { showLoginErr('Wrong password. Try again.'); return false; }
+    const data = await res.json();
+    if (!data.ok) { showLoginErr(data.error || 'Error fetching data.'); return false; }
+
+    submissions = data.submissions || [];
+    renderStats(data.stats || {});
+    renderTable();
+    document.getElementById('last-refresh').textContent = 'Last refreshed: ' + new Date().toLocaleTimeString();
+    return true;
+  } catch (e) {
+    console.error(e);
+    showLoginErr('Network error. Check console.');
+    return false;
+  }
+}
+
+async function saveMemoScore(email, score) {
+  const res = await fetch('/api/admin?key=' + encodeURIComponent(URL_KEY), {
+    method: 'PATCH',
+    headers: apiHeaders(),
+    body: JSON.stringify({ email, memo_score: score })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    // Update local state
+    const row = submissions.find(s => s.email === email);
+    if (row) {
+      row.memo_score = score;
+      row.total_score = (row.auto_score || 0) + score;
+    }
+    renderTable();
+  }
+  return data.ok;
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function renderStats(stats) {
+  document.getElementById('s-total').textContent = stats.total ?? '–';
+  document.getElementById('s-started').textContent = stats.started ?? '–';
+  document.getElementById('s-finished').textContent = stats.finished ?? '–';
+}
+
+function fmt(secs) {
+  if (!secs) return '–';
+  return Math.floor(secs / 60) + ':' + String(secs % 60).padStart(2, '0');
+}
+
+function statusBadge(row) {
+  if (row.end_time) return '<span class="badge done">FINISHED</span>';
+  if (row.start_time) return '<span class="badge inprog">IN PROGRESS</span>';
+  return '<span class="badge pending">REGISTERED</span>';
+}
+
+function sortBy(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = -1; }
+  renderTable();
+}
+
+function sorted() {
+  return [...submissions].sort((a, b) => {
+    let av = a[sortKey] ?? -Infinity;
+    let bv = b[sortKey] ?? -Infinity;
+    if (typeof av === 'string') return sortDir * av.localeCompare(bv);
+    return sortDir * (av - bv);
+  });
+}
+
+function renderTable() {
+  const rows = sorted();
+  const tbody = document.getElementById('tbody');
+  document.getElementById('empty').style.display = rows.length ? 'none' : 'block';
+
+  tbody.innerHTML = rows.map((row, i) => `
+    <tr class="clickable" onclick="openDrawer('${row.email}')">
+      <td class="rank">${i + 1}</td>
+      <td>
+        <div style="font-weight:700">${esc(row.name || '–')}</div>
+        <div style="font-size:11px;opacity:.6">${esc(row.email)}</div>
+      </td>
+      <td>${statusBadge(row)}</td>
+      <td><b>${row.total_score != null ? row.total_score.toFixed(1) : '–'}</b></td>
+      <td>${row.auto_score != null ? row.auto_score.toFixed(1) : '–'}</td>
+      <td>${row.memo_score != null ? row.memo_score.toFixed(1) : '<span style="opacity:.4">ungraded</span>'}</td>
+      <td>${fmt(row.time_taken_seconds)}</td>
+      <td style="font-size:11px;opacity:.6">${row.end_time ? new Date(row.end_time).toLocaleTimeString() : '–'}</td>
+    </tr>
+  `).join('');
+}
+
+// ── Drawer ─────────────────────────────────────────────────────────────────
+function openDrawer(email) {
+  const row = submissions.find(s => s.email === email);
+  if (!row) return;
+
+  document.getElementById('d-name').textContent = (row.name || row.email).toUpperCase();
+  document.getElementById('d-content').innerHTML = buildDrawer(row);
+  document.getElementById('drawer').style.display = 'block';
+}
+
+function closeDrawer(e) {
+  if (e === null || e.target === document.getElementById('drawer')) {
+    document.getElementById('drawer').style.display = 'none';
+  }
+}
+
+function buildDrawer(row) {
+  const a = row.answers || {};
+  const c = row.crises || {};
+  const m = row.meters || {};
+  const log = row.raw_log || [];
+
+  const scoreSection = `
+    <div class="score-grid">
+      <div class="score-box"><b>${(row.total_score ?? 0).toFixed(1)}</b><span>TOTAL</span></div>
+      <div class="score-box"><b>${(row.auto_score ?? 0).toFixed(1)}</b><span>AUTO /88</span></div>
+      <div class="score-box"><b>${row.memo_score != null ? row.memo_score.toFixed(1) : '–'}</b><span>MEMO /12</span></div>
+      <div class="score-box"><b>${fmt(row.time_taken_seconds)}</b><span>TIME</span></div>
+    </div>`;
+
+  const memoGrader = `
+    <div class="card" style="margin-bottom:10px">
+      <div class="k" style="margin-bottom:8px">GRADE MEMO (0–12 marks)</div>
+      <div class="ans-block">
+        <span class="lbl">60-WORD MEMO</span>
+        <div class="val">${esc(a.memo || '(not submitted)')}</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+        <input type="number" id="memo-score-${row.email}" min="0" max="12" step="0.5"
+          value="${row.memo_score ?? ''}" placeholder="0–12" style="width:100px">
+        <button class="p" onclick="gradeSubmit('${row.email}')">Save grade</button>
+        <span id="grade-msg-${row.email}" style="font-size:12px;color:var(--gold)"></span>
+      </div>
+    </div>`;
+
+  const qLabels = [
+    'Q1 · MCQ: Best conclusion (Exhibits 1&2)',
+    'Q2 · Numeric: % change in RASK (FY25→FY26)',
+    'Q3 · Numeric: Extra fuel cost (₹ crore)',
+    'Q4 · Budget allocation (₹ crore each)',
+    'Q5 · Numeric: % passenger volume increase needed',
+    'Q6 · Pick 2: Non-fare retention actions',
+    'Q7 · Numeric: % pilot pool growth required',
+    'Q8 · MCQ: Board 12-month strategy',
+  ];
+  const optLabels = {
+    q1: ['A. IndiGo losing lead', 'B. Leads share but loss — costs matter ✓', 'C. Cut fares now', 'D. Loss from falling share'],
+    q8: ['A. Chase volume/deep fares', 'B. Protect trust & reliability ✓', 'C. Trim maintenance/crew', 'D. Pause investment'],
+  };
+  const q6opts = ['Priority rebooking', 'Proactive app msg', 'Corporate contracts', '15% fare cut ✗', 'Cheapest ads ✗', 'Legroom upsell'];
+  const crisisLabels = [
+    ['Hold & cut fares', 'Trim weak capacity ✓', 'Wait a quarter'],
+    ['Keep 9% growth', 'Yield-targeted growth ✓', 'Freeze growth'],
+    ['Hedge ~50% staged ✓', 'Hedge all today', 'Stay unhedged'],
+    ['Delay loyalty ✓', 'Cut crew resilience', 'Borrow short-term'],
+    ['Targeted offers ✓', 'Match 10% cut all routes', 'Raise fares'],
+    ['Run with honest context ✓', 'Bold claim no caveats', 'Shelve ads'],
+    ['Refuse & trim schedule ✓', 'Allow voluntary extra duty', 'Ask regulator & keep flying'],
+    ['Evidence pack on crew ✓', 'Brand campaign', 'Fuel-hedging paper'],
+  ];
+
+  const answerSection = [1,2,3,4,5,6,7,8].map(qi => {
+    const key = `q${qi}`;
+    let val = a[key];
+    let display = '';
+
+    if (qi === 1 || qi === 8) {
+      const opts = optLabels[key] || [];
+      display = val != null ? (opts[val] || 'Option ' + val) : '(not answered)';
+    } else if (qi === 4) {
+      const labels = ['Crew', 'Maintenance', 'Fuel-efficiency', 'App/comms', 'Loyalty'];
+      display = Array.isArray(val)
+        ? val.map((v, i) => `${labels[i]}: ₹${v || 0} crore`).join('\n')
+        : '(not answered)';
+    } else if (qi === 6) {
+      display = Array.isArray(val)
+        ? val.map(i => q6opts[i]).join(', ')
+        : '(not answered)';
+    } else {
+      display = val != null ? String(val) : '(not answered)';
+      if (a[key + 'w']) display += '\nWorking: ' + a[key + 'w'];
+    }
+
+    return `<div class="ans-block">
+      <span class="lbl">${qLabels[qi - 1]}</span>
+      <div class="val">${esc(display)}</div>
+    </div>`;
+  }).join('');
+
+  const crisisSection = Object.entries(c).map(([k, v]) => {
+    const idx = parseInt(k.replace('tw', '')) - 1;
+    const opts = crisisLabels[idx] || [];
+    return `<div class="ans-block">
+      <span class="lbl">CRISIS ${idx + 1} · ${k.toUpperCase()}</span>
+      <div class="val">${esc(opts[v] || 'Option ' + (v + 1))}</div>
+    </div>`;
+  }).join('');
+
+  const meterSection = Array.isArray(m)
+    ? ['Trust', 'Cash', 'Yield', 'Crew'].map((name, i) =>
+        `<div class="score-box"><b>${m[i] ?? '–'}</b><span>${name}</span></div>`
+      ).join('')
+    : '';
+
+  const timeline = log.length ? `
+    <div class="k" style="margin:14px 0 6px">EVENT TIMELINE</div>
+    <ul class="tl">${log.map(e => `<li><time>${fmt(e[0])}</time> ${esc(String(e[1])) + (e[2] != null ? ' → ' + esc(String(e[2])) : '')}</li>`).join('')}</ul>
+  ` : '';
+
+  return `
+    ${scoreSection}
+    ${memoGrader}
+    <div class="k" style="margin:14px 0 6px">QUESTION ANSWERS</div>
+    ${answerSection}
+    <div class="k" style="margin:14px 0 6px">CRISIS CHOICES</div>
+    ${crisisSection || '<p style="opacity:.5;font-size:13px">No crisis choices recorded.</p>'}
+    ${meterSection ? `<div class="k" style="margin:14px 0 6px">FINAL METERS</div><div class="score-grid">${meterSection}</div>` : ''}
+    ${timeline}
+  `;
+}
+
+async function gradeSubmit(email) {
+  const inp = document.getElementById('memo-score-' + email);
+  const msg = document.getElementById('grade-msg-' + email);
+  const score = parseFloat(inp.value);
+  if (isNaN(score) || score < 0 || score > 12) {
+    msg.textContent = 'Enter 0–12'; msg.style.color = 'var(--danger)'; return;
+  }
+  msg.textContent = 'Saving…'; msg.style.color = 'var(--gold)';
+  const ok = await saveMemoScore(email, score);
+  if (ok) {
+    msg.textContent = '✓ Saved';
+    // Refresh drawer content
+    const row = submissions.find(s => s.email === email);
+    if (row) document.getElementById('d-content').innerHTML = buildDrawer(row);
+  } else {
+    msg.textContent = 'Error saving'; msg.style.color = 'var(--danger)';
+  }
+}
+
+// ── CSV Export ─────────────────────────────────────────────────────────────
+function exportCSV() {
+  const rows = sorted();
+  const header = ['Rank','Name','Email','Status','Total','Auto/88','Memo/12','TimeSecs','Submitted',
+    'Q1','Q2','Q3','Q4_Crew','Q4_Maint','Q4_Fuel','Q4_App','Q4_Loyalty','Q5','Q6','Q7','Q8','Memo'];
+  const lines = [header.join(',')];
+  rows.forEach((row, i) => {
+    const a = row.answers || {};
+    const q4 = Array.isArray(a.q4) ? a.q4 : [,,,,];
+    const status = row.end_time ? 'Finished' : row.start_time ? 'In Progress' : 'Registered';
+    lines.push([
+      i + 1, csvq(row.name), csvq(row.email), status,
+      row.total_score ?? '', row.auto_score ?? '', row.memo_score ?? '',
+      row.time_taken_seconds ?? '',
+      row.end_time ? new Date(row.end_time).toISOString() : '',
+      a.q1 ?? '', a.q2 ?? '', a.q3 ?? '',
+      q4[0] ?? '', q4[1] ?? '', q4[2] ?? '', q4[3] ?? '', q4[4] ?? '',
+      a.q5 ?? '', Array.isArray(a.q6) ? a.q6.join(';') : (a.q6 ?? ''),
+      a.q7 ?? '', a.q8 ?? '', csvq(a.memo)
+    ].join(','));
+  });
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'trial-of-titans-results.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function csvq(v) {
+  if (v == null) return '';
+  return '"' + String(v).replace(/"/g, '""') + '"';
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Auto-refresh every 60s while logged in
+setInterval(() => { if (ADMIN_PASS) load(); }, 60000);
+</script>
+</body>
+</html>
