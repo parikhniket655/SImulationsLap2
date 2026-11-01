@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trial of Titans: The War for the Skies</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--b1:#030b1f;--b2:#0a2a6b;--b3:#1d6fff;--ice:#9fd0ff;--gold:#7fe0ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(ellipse at 50% -10%,#1a4fc7 0%,#0a2a6b 35%,#030b1f 80%) fixed;color:#fff;font:16px/1.5 Lato,Arial,sans-serif;overflow-x:hidden}
+#bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.st{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;animation:tw 3s infinite}
+.cl{position:absolute;width:260px;height:70px;border-radius:50%;background:radial-gradient(ellipse,rgba(159,208,255,.22),transparent 70%);animation:drift linear infinite}
+.jet{position:absolute;width:70px;opacity:.7;animation:drift linear infinite}
+@keyframes drift{from{transform:translateX(-300px)}to{transform:translateX(120vw)}}
+@keyframes tw{50%{opacity:.15}}
+#app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:12px 16px 40px}
+body.flash::after{content:"";position:fixed;inset:0;background:#9fd0ff;opacity:0;animation:fl .5s;z-index:5;pointer-events:none}
+@keyframes fl{0%{opacity:.7}100%{opacity:0}}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:Cinzel,serif;font-weight:700;font-size:19px;letter-spacing:3px}
+.brand small{display:block;font:400 10px Lato,sans-serif;letter-spacing:2px;color:var(--ice)}
+.hr{display:flex;gap:8px;align-items:center}
+.chip{font-size:12px;padding:3px 10px;border:1px solid rgba(159,208,255,.5);border-radius:20px}
+.tm{font-family:Cinzel,serif;font-weight:700;font-size:19px;border:2px solid var(--ice);border-radius:8px;padding:0 10px;box-shadow:0 0 14px rgba(29,111,255,.6)}
+button{min-height:42px;padding:0 18px;border:1px solid rgba(159,208,255,.6);border-radius:8px;background:rgba(10,42,107,.8);color:#fff;font:700 14px Lato,Arial,sans-serif;cursor:pointer;transition:.2s}
+button:hover:not(:disabled){background:#1d6fff;transform:translateY(-1px)}
+button:disabled{opacity:.4;cursor:default}
+button.p{background:linear-gradient(90deg,#1d6fff,#46b8ff);border-color:#fff;box-shadow:0 0 16px rgba(70,184,255,.6)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.mt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
+.mt span{font-size:11px;letter-spacing:1px;color:var(--ice)}
+.mt em{display:block;height:8px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden}
+.mt i{display:block;height:100%;background:linear-gradient(90deg,#1d6fff,#7fe0ff);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.arena{position:relative;height:285px;margin:6px 0;border:1px solid rgba(159,208,255,.4);border-radius:16px;background:linear-gradient(#0a2a6b99,#030b1fcc);overflow:hidden}
+.arena:before{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;background:linear-gradient(#0d3b94,#030b1f)}
+.fg{position:absolute;bottom:20px;text-align:center;font-size:11px;letter-spacing:2px;color:var(--ice)}
+.fg svg{display:block;width:100%;height:auto}
+.fg.L{left:6%;width:130px;animation:bob 3s ease-in-out infinite}
+.fg.R{right:7%;width:150px;animation:bob 4s ease-in-out infinite;filter:drop-shadow(0 0 18px #1d6fff)}
+.fg.Q{left:50%;margin-left:-45px;width:90px;bottom:60px;opacity:.9;animation:bob 5s ease-in-out infinite}
+.enter{animation:inR 1s cubic-bezier(.2,.9,.3,1.1) both!important}
+.arena.strike .fg.L{animation:lunge .9s ease-in-out both}
+.arena.strike .fg.R{animation:shake .5s .35s 2}
+.arena.hit .fg.L{animation:shake .5s 2}
+.arena.hit .fg.R{animation:lunge2 .9s both}
+.arena.stag .fg.R{animation:shake .5s 2;filter:brightness(2) drop-shadow(0 0 18px #fff)}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@keyframes inR{from{transform:translateX(160%) scale(1.3);opacity:0}to{transform:none;opacity:1}}
+@keyframes lunge{40%{transform:translateX(min(48vw,420px)) scale(1.15)}100%{transform:none}}
+@keyframes lunge2{40%{transform:translateX(max(-48vw,-420px)) scale(1.15)}100%{transform:none}}
+@keyframes shake{25%{transform:translateX(-10px) rotate(-3deg)}75%{transform:translateX(10px) rotate(3deg)}}
+.eye{animation:tw 1.6s infinite}
+.hp{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:38%;text-align:center;font:700 12px Cinzel,serif;letter-spacing:2px}
+.hp em{display:block;height:10px;margin-top:3px;border:1px solid var(--ice);border-radius:6px;overflow:hidden;background:#0007}
+.hp i{display:block;height:100%;background:linear-gradient(90deg,#46b8ff,#fff);transition:width 1.2s}
+.sw{position:absolute;left:14px;top:10px;max-width:24%;font:700 12px Cinzel,serif;letter-spacing:2px;color:var(--ice)}
+.card{background:rgba(5,20,55,.82);border:1px solid rgba(159,208,255,.4);border-radius:14px;padding:16px 18px;margin-top:12px;animation:up .5s both;backdrop-filter:blur(4px)}
+.k{font-size:11px;letter-spacing:2px;color:var(--gold)}
+h1,h2{font-family:Cinzel,serif;margin:2px 0 8px}h1{font-size:34px;letter-spacing:4px}h2{font-size:20px}
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+.say{display:flex;gap:12px;align-items:flex-end;margin-top:12px;animation:up .5s both}
+.say .pt{width:84px;flex:none}.say .pt svg{width:100%;display:block;filter:drop-shadow(0 0 10px #46b8ff);animation:bob 4s infinite}
+.bub{flex:1;background:rgba(10,42,107,.85);border:1px solid var(--ice);border-radius:14px;padding:12px 16px}
+.bub i{font-style:normal;font-size:11px;letter-spacing:2px;color:var(--gold);display:block}
+.opt{display:block;width:100%;text-align:left;margin:7px 0;padding:10px 14px;min-height:46px;line-height:1.35;animation:up .4s both}
+.opt.s{background:linear-gradient(90deg,#1d6fff,#46b8ff);border-color:#fff}
+.opt:nth-child(2){animation-delay:.12s}.opt:nth-child(3){animation-delay:.24s}.opt:nth-child(4){animation-delay:.36s}
+.alert{background:repeating-linear-gradient(45deg,#c1272d,#c1272d 14px,#7a0f14 14px,#7a0f14 28px);padding:6px 14px;border-radius:8px;font:700 14px Cinzel,serif;letter-spacing:3px;animation:sir .8s infinite;text-align:center}
+@keyframes sir{50%{box-shadow:0 0 28px #ff4d4d;filter:brightness(1.4)}}
+input,textarea{width:100%;padding:9px;border-radius:8px;border:1px solid var(--ice);background:rgba(3,11,31,.7);color:#fff;font:15px Lato,Arial,sans-serif}
+textarea{min-height:84px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:8px}
+.out{background:rgba(29,111,255,.2);border-radius:8px;padding:8px 12px;margin-top:8px}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:12px}
+.dl{display:inline-block;margin:4px 6px 0 0;padding:3px 10px;border-radius:14px;background:#1d6fff55;border:1px solid var(--ice);animation:chip 1.4s both}
+@keyframes chip{0%{opacity:0;transform:translateY(20px) scale(.6)}30%{opacity:1;transform:none}}
+.dos{position:fixed;inset:0;background:#030b1fee;z-index:9;overflow:auto;padding:18px}
+.dos table,.card table{border-collapse:collapse;min-width:100%}
+td,th{padding:5px 9px;border-bottom:1px solid rgba(159,208,255,.25);text-align:left;font-size:13px}th{color:var(--gold)}
+.sc{overflow-x:auto}.note{font-size:12px;opacity:.7;text-align:center;margin-top:20px}
+.ttl{position:relative;height:200px}.ttl .fg{bottom:0}
+@media(max-width:560px){.fg.R{width:120px}.fg.L{width:90px}.fg.Q{display:none}.arena{height:250px}.hp{width:60%;top:34px}.sw{max-width:90%}h1{font-size:24px}}
+
+.fg.L,.fg.R,.fg.Q{animation:breathe 5s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes breathe{50%{transform:scaleY(1.014)}}
+.fg.R{filter:drop-shadow(0 0 26px rgba(60,130,255,.35));width:190px}.fg.L{width:120px}.fg.Q{opacity:.55;width:70px;bottom:44px;filter:blur(.4px)}
+.arena{height:310px;background:radial-gradient(ellipse at 70% 90%,#12409a55,transparent 60%),linear-gradient(#071a45,#02060f);box-shadow:inset 0 0 60px #000c}
+.arena:before{background:linear-gradient(#0a1c46,#02060f)}
+.arena:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse,transparent 55%,#000a 100%)}
+.mist{position:absolute;left:-10%;right:-10%;bottom:14px;height:80px;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 30% 100%,#6aa8ff30,transparent 60%),radial-gradient(ellipse at 75% 100%,#6aa8ff26,transparent 60%);animation:mist 18s ease-in-out infinite alternate}
+@keyframes mist{to{transform:translateX(8%)}}
+.em{position:absolute;bottom:30px;width:3px;height:3px;border-radius:50%;background:#9fd0ff;box-shadow:0 0 6px #4aa0ff;opacity:0;animation:em 7s linear infinite;z-index:3}
+@keyframes em{10%{opacity:.8}100%{transform:translate(24px,-230px);opacity:0}}
+.core{transform-box:fill-box;transform-origin:center;animation:core 3.2s ease-in-out infinite}@keyframes core{50%{opacity:.55;transform:scale(.88)}}
+.cape{transform-box:fill-box;transform-origin:100% 0;animation:cape 4.5s ease-in-out infinite}@keyframes cape{50%{transform:skewX(-4deg) scaleX(.96)}}
+.imp{position:absolute;left:70%;bottom:90px;width:12px;height:12px;border:1.5px solid #cfe6ff;border-radius:50%;opacity:0;z-index:4}
+.arena.hit .imp,.arena.stag.x .imp{left:30%}
+.arena.strike .imp,.arena.hit .imp,.arena.stag .imp{animation:ring .9s .45s cubic-bezier(.2,.7,.3,1) both}
+@keyframes ring{from{opacity:.9;transform:translate(-50%,0) scale(1)}to{opacity:0;transform:translate(-50%,0) scale(16)}}
+.enter{animation:rise 1.8s cubic-bezier(.22,1,.36,1) both!important}
+@keyframes rise{from{transform:translateY(46px) scale(1.05);opacity:0;filter:blur(10px)}to{transform:none;opacity:1}}
+.arena.strike .fg.L{animation:adv 1s cubic-bezier(.65,0,.35,1) both}
+.arena.strike .fg.R{animation:rec .9s .45s cubic-bezier(.22,1,.36,1) both}
+.arena.hit .fg.R{animation:advR 1s cubic-bezier(.65,0,.35,1) both}
+.arena.hit .fg.L{animation:recL .9s .45s cubic-bezier(.22,1,.36,1) both}
+.arena.stag .fg.R{animation:rec .9s cubic-bezier(.22,1,.36,1) both}
+@keyframes adv{45%,55%{transform:translateX(min(44vw,380px))}}
+@keyframes advR{45%,55%{transform:translateX(max(-44vw,-380px))}}
+@keyframes rec{25%{transform:translateX(18px);filter:brightness(1.7) drop-shadow(0 0 26px #6aa8ff)}}
+@keyframes recL{25%{transform:translateX(-18px);filter:brightness(1.5)}}
+.arena.strike,.arena.hit{animation:cam .6s .45s}
+@keyframes cam{15%{transform:translate(-4px,2px)}35%{transform:translate(4px,-2px)}60%{transform:translate(-2px,1px)}}
+.eye{animation:eye 3s ease-in-out infinite;filter:drop-shadow(0 0 5px currentColor)}@keyframes eye{50%{opacity:.55}}
+.say .pt svg{animation:none;filter:drop-shadow(0 6px 14px #000a)}
+.say .pt{width:70px}
+.bub{background:linear-gradient(#0a2457cc,#05122ecc);border:1px solid #5d8fe0aa;border-radius:6px;box-shadow:0 8px 24px #0008}
+.card{border-radius:6px;background:linear-gradient(#071a45cc,#04102ae6);border-color:#5d8fe055;box-shadow:0 10px 30px #0007}
+button{border-radius:4px;background:#0a1f4b;border-color:#5d8fe0;letter-spacing:.5px;font-weight:700}
+button:hover:not(:disabled){background:#123a85;transform:none;box-shadow:0 0 0 1px #9fd0ff}
+button.p{background:linear-gradient(#2a6be0,#164aa8);border-color:#9fd0ff;box-shadow:none}
+.opt{border-radius:4px}.opt.s{background:linear-gradient(#2a6be0,#164aa8);border-color:#cfe6ff}
+.alert{background:linear-gradient(90deg,#7a1018,#2a0509);border:1px solid #c1363e;border-radius:3px;padding:7px 14px;font:700 12px Cinzel,serif;letter-spacing:5px;text-align:left;animation:sir 2.4s ease-in-out infinite;box-shadow:none}
+@keyframes sir{50%{border-color:#ff6b72;background:linear-gradient(90deg,#9a1822,#2a0509)}}
+.tm{border-radius:4px;box-shadow:none;border-color:#5d8fe0}
+.dl{border-radius:3px;background:#0a2457;animation:chip 1.2s cubic-bezier(.22,1,.36,1) both}
+.cl{filter:blur(14px);opacity:.5}.jet{opacity:.22;width:40px}.hp em{height:6px;border-radius:2px}.hp i{background:linear-gradient(90deg,#2a6be0,#9fd0ff)}
+body.flash::after{background:#cfe6ff;animation:fl .7s ease-out}@keyframes fl{0%{opacity:.18}100%{opacity:0}}
+@media(max-width:560px){.arena{height:260px}.fg.R{width:130px}.fg.L{width:84px}}
+
+.lay{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start}
+.lay aside{position:sticky;top:10px}
+.lay aside .card{margin-top:0;margin-bottom:12px}
+.ex{margin-top:8px}.ex p{font-size:12px;opacity:.75;margin:4px 0 8px}.ex td,.ex th{padding:4px 7px;font-size:13px}
+.pips{display:flex;gap:6px;margin:10px 0 2px}.pips i{flex:1;height:4px;border-radius:2px;background:#ffffff22;transition:.6s}.pips i.d{background:#4aa0ff}.pips i.c{background:#cfe6ff;box-shadow:0 0 8px #6aa8ff}
+#app{max-width:1180px}.arena{height:270px}.fg.R{width:165px}.fg.L{width:104px}
+@media(max-width:860px){.lay{grid-template-columns:1fr}.lay aside{position:static}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="tex"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.1 .95" result="m"/><feComposite in="m" in2="SourceAlpha" operator="in" result="g"/><feBlend in="SourceGraphic" in2="g" mode="multiply"/></filter></defs></svg>
+<div id="bg" aria-hidden="true"></div>
+<div id="app"></div>
+<script>
+const ROOK='<svg viewBox="0 0 40 40" width="30" height="30" fill="none" stroke="#fff" stroke-width="2.5" aria-hidden="true"><path d="M8 6v6h24V6h-5v3h-3V6h-6v3h-3V6z M11 12l2 14h14l2-14 M9 26h22v5H9z M7 34h26"/></svg>';
+const CMD=`<svg viewBox="0 0 150 230" aria-hidden="true"><defs><linearGradient id="cs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8f1ff"/><stop offset=".45" stop-color="#7f97b8"/><stop offset="1" stop-color="#1d2c47"/></linearGradient><linearGradient id="cb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9d3a0"/><stop offset=".5" stop-color="#a07c3c"/><stop offset="1" stop-color="#4d3715"/></linearGradient><linearGradient id="cc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e4fb5"/><stop offset="1" stop-color="#06173b"/></linearGradient><radialGradient id="cr" cx=".35" cy=".3"><stop offset="0" stop-color="#cfe6ff"/><stop offset=".5" stop-color="#5a7499"/><stop offset="1" stop-color="#16233c"/></radialGradient></defs>
+<g class="cape"><path d="M56 70C26 92 12 150 20 222L66 214L72 80Z" fill="url(#cc)"/><path d="M56 70C34 100 28 150 34 218" stroke="#7fb4ff" stroke-opacity=".35" fill="none"/></g>
+<path d="M66 142L62 222H80L88 142Z" fill="url(#cs)"/><path d="M92 142L98 222H114L110 142Z" fill="url(#cs)" opacity=".85"/><path d="M60 218h24v8H58zM96 218h22v8H96z" fill="#0b1426"/>
+<path d="M62 132L58 164H112L106 132Z" fill="url(#cb)" opacity=".9"/><path d="M66 140v24M76 140v24M86 140v24M96 140v24" stroke="#2e2210" stroke-opacity=".5"/>
+<path d="M60 74Q86 62 112 74L108 140Q86 150 64 140Z" fill="url(#cs)" stroke="#cfe6ff" stroke-opacity=".5"/><path d="M72 88h28M72 100h28M74 112h24" stroke="#0e1a30" stroke-opacity=".45" stroke-width="2"/><path d="M86 78v60" stroke="#fff" stroke-opacity=".25"/>
+<path d="M56 74Q66 62 82 70L76 92Q64 96 54 88Z" fill="url(#cb)" stroke="#f5e4b8" stroke-opacity=".5"/>
+<path d="M100 82L122 112L112 122L96 96Z" fill="url(#cs)"/><path d="M112 118L134 150" stroke="#9db4d6" stroke-width="9" stroke-linecap="round"/>
+<path d="M132 20L136 214" stroke="#d9e6f7" stroke-width="3"/><path d="M132 2L141 34L132 30L124 34Z" fill="url(#cs)" stroke="#fff" stroke-opacity=".6"/>
+<path d="M74 24Q88 4 104 24L106 56Q90 68 74 56Z" fill="url(#cs)" stroke="#cfe6ff" stroke-opacity=".6"/><path d="M80 38h22v7H80z" fill="#050b18"/><path d="M92 8C70 -4 40 12 36 46C54 28 72 24 92 26Z" fill="url(#cc)" stroke="#7fb4ff" stroke-opacity=".5"/><path d="M88 6Q90 20 90 28" stroke="url(#cb)" stroke-width="3" fill="none"/>
+<circle cx="62" cy="122" r="26" fill="url(#cr)" stroke="url(#cb)" stroke-width="3"/><circle cx="62" cy="122" r="12" fill="none" stroke="#e9d3a0" stroke-opacity=".7"/></svg>`;
+const QUEEN=`<svg viewBox="0 0 130 220" aria-hidden="true"><defs><linearGradient id="qr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a5fc9"/><stop offset=".6" stop-color="#0d2a6a"/><stop offset="1" stop-color="#050f2b"/></linearGradient><linearGradient id="qk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0d9bd"/><stop offset="1" stop-color="#b58a66"/></linearGradient><linearGradient id="qg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5ecc8"/><stop offset="1" stop-color="#8d7436"/></linearGradient></defs>
+<path d="M44 78L24 214H110L84 78Z" fill="url(#qr)"/><path d="M52 80L44 214M64 82L62 214M76 80L84 214" stroke="#9fc4ff" stroke-opacity=".18"/><path d="M40 82Q64 66 90 82L84 108Q64 116 46 108Z" fill="#102f78" stroke="#9fc4ff" stroke-opacity=".5"/><path d="M52 104Q64 120 78 104" fill="none" stroke="url(#qg)" stroke-width="3"/><path d="M60 114L64 170L70 114Z" fill="url(#qg)" opacity=".8"/>
+<path d="M52 36C48 8 84 8 80 36L78 64Q64 78 54 64Z" fill="#0b1633"/><path d="M55 34Q66 26 78 34L76 62Q66 74 56 62Z" fill="url(#qk)"/><path d="M58 46h5M70 46h5" stroke="#2a1a14" stroke-width="2" stroke-linecap="round"/><path d="M62 58Q67 61 72 58" stroke="#8a4a3a" fill="none" stroke-linecap="round"/><path d="M50 30L54 14L60 24L66 8L72 24L78 14L82 30Z" fill="url(#qg)" stroke="#fff" stroke-opacity=".4"/><circle cx="66" cy="22" r="2.5" fill="#6fb6ff"/><path d="M50 36C44 56 48 80 54 96M82 36C88 56 84 80 80 96" stroke="#0b1633" stroke-width="7" fill="none" stroke-linecap="round"/></svg>`;
+const TC=[['#3d82ff','#0b2150'],['#9fe8ff','#0d3b6b'],['#2f7bff','#06214d'],['#a9b4ff','#161f55']];
+function titan(i){const g=TC[i][0],d=TC[i][1],wp=[
+`<path d="M188 6V250" stroke="#aebfd8" stroke-width="5"/><path d="M188 8C142 -4 112 22 106 58C134 34 160 30 188 38Z" fill="url(#ts${i})" stroke="${g}" stroke-width="2"/><path d="M188 14C150 8 126 24 118 48" stroke="${g}" stroke-opacity=".7" fill="none"/>`,
+`<path d="M188 40V252" stroke="#aebfd8" stroke-width="5"/><path d="M188 0L202 44L188 38L174 44Z" fill="${g}"/><circle cx="188" cy="30" r="26" fill="none" stroke="${g}" stroke-opacity=".5" stroke-width="2"><animate attributeName="r" values="22;32;22" dur="3.5s" repeatCount="indefinite"/></circle>`,
+`<path d="M188 10V252M168 14v40q20 16 40 0V14M188 0v14" stroke="#aebfd8" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M168 14L168 -2M208 14V-2" stroke="${g}" stroke-width="4"/>`,
+`<path d="M188 44V252" stroke="#aebfd8" stroke-width="6"/><path d="M158 14h60l8 18l-8 18h-60l-8-18z" fill="url(#ts${i})" stroke="${g}" stroke-width="2"/><path d="M164 32h48" stroke="${g}" stroke-opacity=".6"/>`][i];
+ return `<svg viewBox="0 0 230 280" aria-hidden="true"><defs><linearGradient id="ts${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fa3c4"/><stop offset=".35" stop-color="#34456b"/><stop offset="1" stop-color="${d}"/></linearGradient><radialGradient id="tg${i}"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="${g}"/><stop offset="1" stop-color="${g}" stop-opacity="0"/></radialGradient></defs>
+<g filter="url(#tex)"><path d="M78 190L70 280H120L124 190Z" fill="url(#ts${i})"/><path d="M128 190L130 280H168L158 190Z" fill="url(#ts${i})" opacity=".85"/>
+<path d="M62 92H176L160 200H80Z" fill="url(#ts${i})" stroke="${g}" stroke-opacity=".5" stroke-width="1.5"/><path d="M84 110H154M88 150H150M92 180H146" stroke="#050d22" stroke-opacity=".5" stroke-width="2"/>
+<path d="M36 84L62 62L92 92L96 116L52 122Z" fill="url(#ts${i})" stroke="${g}" stroke-opacity=".6"/><path d="M36 84L26 62L50 70M56 66L50 44L72 60" fill="url(#ts${i})" stroke="${g}" stroke-opacity=".6"/>
+<path d="M142 92L172 62L200 84L186 122L146 116Z" fill="url(#ts${i})" stroke="${g}" stroke-opacity=".6"/><path d="M200 84L212 62L190 70M168 66L176 44L152 60" fill="url(#ts${i})" stroke="${g}" stroke-opacity=".6"/>
+<path d="M50 120L38 196L62 200L74 126Z" fill="url(#ts${i})" opacity=".92"/><path d="M180 116L188 160" stroke="#34456b" stroke-width="22" stroke-linecap="round"/>
+<path d="M92 36L119 14L146 36L140 82L119 92L98 82Z" fill="url(#ts${i})" stroke="${g}" stroke-opacity=".7" stroke-width="1.5"/><path d="M96 34L82 8L106 22M142 34L156 8L132 22" fill="url(#ts${i})" stroke="${g}" stroke-opacity=".6"/><path d="M100 54H138" stroke="#02060f" stroke-width="9" stroke-linecap="round"/></g>
+<path d="M102 54H136" stroke="${g}" stroke-width="3" stroke-linecap="round" class="eye"/><circle cx="119" cy="140" r="30" fill="url(#tg${i})" class="core"/><circle cx="119" cy="140" r="9" fill="#fff" opacity=".9"/><path d="M119 140L92 112M119 140L148 118M119 140L104 186M119 140L142 176" stroke="${g}" stroke-opacity=".6" fill="none"/>${wp}</svg>`}
+const EX=[['Exhibit 1 · Market, August 2026',['Airline|Passengers (lakh)|Share|On time','IndiGo|79|65%|91%','Air India Group|32|27%|84%','Akasa Air|7|6%|90%','Others|3|2%|n/a'],'Total domestic traffic: about 121 lakh passengers. In September traffic fell 6.5%. Rounded from DGCA data.'],
+['Exhibit 2 · IndiGo scorecard',['Item|FY25|FY26','Revenue (₹ crore)|80,000|84,000','Capacity, ASK (billion)|160|175','RASK (₹ per ASK)|5.00|4.80','Fuel cost per ASK (₹)|1.60|1.40','Other cost per ASK (₹)|2.90|2.90','Net result, FY26|n/a|Loss of about ₹2,400 crore'],'ASK = one seat flown one km. RASK = revenue per ASK. The loss came mainly from currency effects and labour-law provisions. Figures rounded for the exercise.'],
+['Exhibit 3 · The fuel shock, Q1 FY27',['Item|Value','Fuel cost per ASK, FY26|₹1.40','Fuel cost per ASK, Q1 FY27|₹2.50','Capacity to use (FY26 level)|175 billion ASK','Fuel as share of revenue|44% (was 30%)','Other cost per ASK|₹2.90','RASK to use|₹4.80'],'Handy: ₹1 billion = ₹100 crore.'],
+['Exhibit 4 · Route A, Delhi to Mumbai',['Item|Route A','Average fare|₹5,000','Variable cost per passenger|₹4,000','Contribution per passenger|₹1,000','Load factor|90% (nearly full)'],'Contribution = fare − variable cost. Illustrative route data, not company figures.'],
+['Exhibit 5 · The December 2025 disruption',['Item|Reported fact','Flights cancelled|About 4,500','Passengers affected|About 12.5 lakh','Refunds|About ₹1,100 crore','Goodwill|₹10,000 vouchers for the worst hit','Cause|New crew duty rules; rosters not ready'],'Rounded from public reports.'],
+['Exhibit 6 · Crew rules',['Item|Today|New rule','Max duty per pilot per month|100 hours|80 hours (−20%)','Flying to be covered|Same schedule|Same schedule'],'Illustrative.']];
+const RD=[
+{n:'The Call of Olympus',t:'CRONUS',s:'Titan of Devouring Time',c:['#4f8dff','#0a2a6b'],w:0,l:'India’s largest airline flies two of every three domestic passengers, yet it has reported a loss. Cronus feeds on thin yields. Read the signs first.'},
+{n:'The Treasury of Hades',t:'HYPERION',s:'Titan of Burning Light',c:['#7fe0ff','#0d3b94'],w:1,l:'Fuel has surged and December’s refunds still echo. Hyperion burns the treasury, and it cannot save everything.'},
+{n:'The Art of War',t:'OCEANUS',s:'Titan of the Fare Tide',c:['#3aa0ff','#05204f'],w:2,l:'Air India Group is back and every fare is a battlefield. Oceanus sends wave after wave of price cuts.'},
+{n:'The Betrayal of Ares',t:'ATLAS',s:'Titan of the Heavy Burden',c:['#9fb8ff','#14306f'],w:3,l:'The crews who keep the aeroplanes flying are tired, and the rules have changed. Atlas wants them to carry it all.'}];
+const QS=[
+{r:0,t:'m',m:8,ex:[0,1],h:'The Oracle’s first warning',q:'Which conclusion is best supported by Exhibits 1 and 2?',o:['IndiGo is losing its lead because Air India Group is close behind.','IndiGo still leads on share and punctuality, yet FY26 ended in a loss, so costs and yields matter more than demand.','IndiGo should cut fares at once to win passengers back.','The loss is explained by falling market share.'],tip:'Look at what is strong (share 65%, on time 91%) and what is not (the loss).'},
+{r:0,t:'n',m:8,u:'%',ex:[1],h:'The thinning yield',q:'Revenue grew 5% but capacity grew about 9%. Using the RASK values in Exhibit 2, what is the percentage change in RASK from FY25 to FY26? (Use a minus sign for a fall.)',tip:'% change = (new − old) ÷ old × 100.'},
+{r:1,t:'n',m:8,u:'₹ crore',ex:[2],h:'The cost of thirsty wings',q:'If fuel stays at ₹2.50 per ASK for a full year at 175 billion ASK, how much EXTRA fuel cost does IndiGo carry compared with ₹1.40?',tip:'Extra per ASK × ASK in billions = ₹ billion. Then ×100 to get ₹ crore.'},
+{r:1,t:'b',m:8,ex:[4],h:'Divide the divine wealth',q:'Hades sets aside an illustrative ₹1,000 crore resilience fund. Allocate all of it across the five projects (steps of ₹50 crore).',o:['Crew rostering and reserve crew','Maintenance and spare parts','Fuel-efficiency upgrades','Passenger app and disruption messages','Loyalty programme upgrade'],tip:'Think about what caused December and what protects trust. No project needs money for its own sake.'},
+{r:2,t:'n',m:8,u:'%',ex:[3],h:'The fare-war trap',q:'A rival cuts Route A fares by 10%. If IndiGo matches, by what percentage must passengers rise to keep total contribution the same?',tip:'New fare − ₹4,000 = new contribution. Old contribution ÷ new contribution = volume needed.'},
+{r:2,t:'p',m:8,k:2,ex:[0,4],h:'Win back the mortals',q:'Pick two actions that win customers without relying on lower fares.',o:['Priority rebooking and a fly-again promise for loyal members','Honest, proactive disruption messages in the app','Corporate contracts with reliability commitments','A blanket 15% fare cut','Ads claiming to be the cheapest','Paid extra-legroom seats on the busiest routes'],tip:'Ask: does it build trust, or just discount?'},
+{r:3,t:'n',m:8,u:'%',ex:[5],h:'The scale of the exodus',q:'The new rule cuts each pilot’s monthly duty from 100 to 80 hours. To fly the same schedule, by what percentage must the pilot pool grow?',tip:'Same total hours needed. Pilots needed = old hours ÷ new hours.'},
+{r:3,t:'m',m:8,ex:[0,1,2,3,4,5],h:'The final confrontation',q:'Choose the strongest 12-month strategy for the Board.',o:['Chase volume with deep fares to crush the rival.','Protect trust and reliability first: resilient crew planning, yield-focused pricing with targeted offers, staged fuel hedging, a cash buffer and honest communication.','Trim maintenance and crew rest to cut cost quickly.','Pause all investment and wait for fuel prices to fall.'],tip:'The best answer links your earlier findings: yield, fuel, cash, crew and trust.'},
+{r:3,t:'w',m:12,ex:[],h:'The final memo',q:'Send the Board a memo in 60 words or fewer: what to do first, why, and the main risk. Quote at least one number.',tip:'First action, one figure, one risk.'}];
+const TW=[
+{x:'DGCA data lands: domestic traffic fell 6.5% in September. The Chairman asks if this changes your first read.',o:['Hold capacity and win share with lower fares.','Trim weak off-peak capacity and protect yield.','Wait a quarter for more data.'],d:[[0,-6,-10,0],[0,4,10,-2],[0,-3,-4,0]]},
+{x:'An analyst says part of the dip is deliberate: new routes start at low yields. The Board asks about next year’s growth.',o:['Keep growing capacity around 9% a year.','Grow only where a route clears a minimum yield target.','Freeze all growth.'],d:[[0,-4,-6,-3],[1,3,8,0],[0,2,-3,-6]]},
+{x:'Fuel prices ease 10% next month. Treasury asks whether to lock in fuel hedges now.',o:['Hedge about half, in staged contracts.','Hedge everything today at current prices.','Stay unhedged because prices are falling.'],d:[[0,8,0,0],[0,-4,0,0],[0,-9,0,0]]},
+{x:'Cash alert: ₹300 crore of refund and voucher claims arrive this quarter, earlier than planned. Cut a project or borrow?',o:['Delay the loyalty programme upgrade.','Cut crew resilience spending.','Borrow short term to protect every project.'],d:[[0,6,-2,0],[0,6,0,-12],[0,-6,0,0]]},
+{x:'Volume on Route A is impossible: it already runs at 90% load. Rival offers are trending on social media. What now?',o:['Targeted offers for price-sensitive segments only.','Match the 10% cut on every route.','Raise fares to signal premium quality.'],d:[[2,2,8,0],[0,-6,-12,0],[-6,0,-4,0]]},
+{x:'Marketing wants a “most punctual airline” campaign using August’s 91% while December’s cancellations are still fresh. Approve?',o:['Run it with honest context: the source, the period and a recovery pledge.','Run the bold claim without caveats.','Shelve all brand advertising.'],d:[[8,0,2,0],[-10,0,4,0],[-2,0,-4,0]]},
+{x:'Operations says the full schedule can still run if crew accept “voluntary” extra duty and nobody reports fatigue. The revenue at stake is large.',o:['Refuse. Trim the schedule to legal crew capacity and tell passengers early.','Allow voluntary extra duty to keep the schedule.','Ask for regulator relaxation and keep flying meanwhile.'],d:[[6,-6,-4,8],[-12,6,4,-14],[-5,0,0,-6]]},
+{x:'A surprise regulator audit is announced for tomorrow. What do you ship first?',o:['An evidence pack on crew rest and roster compliance.','A new brand advertising campaign.','A fuel-hedging policy paper.'],d:[[6,0,0,6],[-4,-4,0,0],[0,2,0,-2]]}];
+const CX=[a=>'',a=>'',a=>a.q3?` Your own estimate of the extra fuel bill: ₹${(+a.q3).toLocaleString('en-IN')} crore.`:'',a=>(+((a.q4||[])[0])<200)?' With crew reserves this thin, a cut would hurt.':'',a=>a.q5?` Your sums said passengers must rise ${a.q5}%.`:'',a=>'',a=>a.q7?` Your own sums say the pilot pool must grow ${a.q7}%.`:'',a=>(+((a.q4||[])[0])>=250)?' Your roster investment gives you evidence to show.':''];
+const MN=['Trust','Cash','Yield','Crew'],TL=900,NQ=8;
+const $=s=>document.querySelector(s);
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>Math.floor(n/60)+':'+String(n%60).padStart(2,'0');
+const wc=s=>s&&s.trim()?s.trim().split(/\s+/).length:0;
+const hs=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return(h>>>0).toString(36)};
+const sum=a=>(a||[]).reduce((s,x)=>s+(+x||0),0);
+const st={sc:0,ph:'',q:0,team:'',code:'',t0:0,end:0,log:[],a:{},pk:{},m:[60,60,60,60],mp:[60,60,60,60],hp:100,fx:'',en:0,dos:0,err:'',tid:null,out:'',chips:'',last:0,dsum:0};
+function L(k,v){st.log.push([Math.round((Date.now()-st.t0)/1000),k,v])}
+function bg(){let h='';for(let i=0;i<40;i++)h+=`<i class="st" style="left:${Math.random()*100}%;top:${Math.random()*70}%;animation-delay:${Math.random()*3}s"></i>`;for(let i=0;i<5;i++)h+=`<i class="cl" style="top:${8+i*16}%;animation-duration:${50+i*18}s;animation-delay:-${i*14}s"></i>`;const jet='<svg viewBox="0 0 80 30"><path d="M2 15L30 12L52 2L58 2L48 12L74 13L78 15L74 17L48 18L58 28L52 28L30 18Z" fill="#cfe6ff"/></svg>';for(let i=0;i<3;i++)h+=`<div class="jet" style="top:${12+i*22}%;animation-duration:${22+i*9}s;animation-delay:-${i*8}s">${jet}</div>`;$('#bg').innerHTML=h}
+const say=(w,tag,txt)=>`<div class="say"><div class="pt">${w=='q'?QUEEN:CMD}</div><div class="bub"><i>${tag}</i>${txt}</div></div>`;
+function meters(){return `<div class="mt">${MN.map((n,i)=>`<div><span>${n.toUpperCase()}</span><em><i id="m${i}" style="width:${st.mp[i]}%"></i></em></div>`).join('')}</div>`}
+function arena(){const i=Math.min(3,st.q<NQ?QS[st.q].r:3),r=RD[i];return `<div class="arena ${st.fx}"><div class="sw">${E(RD[i].n.toUpperCase())}</div><div class="hp">${r.t} · ${r.s}<em><i style="width:${st.hp}%"></i></em></div><div class="fg Q">${QUEEN}</div><div class="mist"></div><i class="imp"></i>${Array.from({length:10},(_,k)=>`<i class="em" style="left:${8+k*9}%;animation-delay:-${k*.7}s"></i>`).join('')}<div class="fg L">${CMD}COMMANDER</div><div class="fg R ${st.en?'enter':''}">${titan(i)}${r.t}</div></div>`}
+function head(){return `<div class="top"><div class="brand">${ROOK}<div>TRIAL OF TITANS<small>THE WAR FOR THE SKIES · COTY 2027 · WAZIR</small></div></div><div class="hr">${st.team?`<span class="chip">${E(st.team)}</span>`:''}${st.sc==2?'<button id="dsb" data-a="dos">DOSSIER</button><span class="tm" id="tm">15:00</span>':''}</div></div>${st.sc==2?`<div class="pips">${Array.from({length:NQ+1},(_,k)=>`<i class="${k<st.q||(k==st.q&&(st.ph=='tw'||st.ph=='rx'))?'d':k==st.q?'c':''}"></i>`).join('')}</div>`:''}`}
+function exh(n){const x=EX[n];return `<div class="ex"><div class="k">${x[0].toUpperCase()}</div><div class="sc"><table>${x[1].map((r,i)=>`<tr>${r.split('|').map(c=>i?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</table></div><p>${x[2]}</p></div>`}
+function side(){const q=QS[Math.min(st.q,NQ)];const show=st.ph=='q'||st.ph=='ri'?q.ex:(QS[st.q].ex||[]);return `<aside><div class="card"><div class="k">CASE FILE · FOR THIS TRIAL</div>${show.length?show.slice(0,2).map(exh).join(''):'<p style="margin:6px 0 0;font-size:14px">No new data. Use your own earlier answers.</p>'}${show.length>2?'<p style="font-size:13px;margin:6px 0 0">More exhibits are in the dossier.</p>':''}<button style="width:100%;margin-top:8px" data-a="dos">Open full dossier</button></div>${st.ph=='q'&&q.tip?`<details class="card"><summary class="k">NEED A HINT? (NO PENALTY)</summary><p style="margin:6px 0 0;font-size:14px">${q.tip}</p></details>`:''}</aside>`}
+function dossier(){return `<div class="dos"><div class="row" style="margin:0 0 8px"><h2>THE DOSSIER</h2><button class="p" data-a="dos">Close</button></div>${EX.map(e=>`<div class="card"><div class="k">${e[0].toUpperCase()}</div><div class="sc"><table>${e[1].map((r,i)=>`<tr>${r.split('|').map(c=>i?`<td>${c}</td>`:`<th>${c}</th>`).join('')}</tr>`).join('')}</table></div><p style="font-size:12px;opacity:.8;margin:6px 0 0">${e[2]}</p></div>`).join('')}</div>`}
+function qcard(){const q=QS[st.q],n=st.q+1,id='q'+n,v=st.a[id];let b='';
+ if(q.t=='m')b=q.o.map((o,i)=>`<button class="opt ${v===i?'s':''}" data-a="pick" data-v="${i}"><b>${'ABCD'[i]}.</b> ${o}</button>`).join('');
+ if(q.t=='n')b=`<label>Answer (${q.u})<input type="number" step="any" data-q="${id}" value="${E(v)}"></label><label style="display:block;margin-top:8px">Working (optional)<input data-q="${id}w" value="${E(st.a[id+'w'])}"></label>`;
+ if(q.t=='p'){const s=st.pk[id]||[];b=q.o.map((o,i)=>`<button class="opt ${s.includes(i)?'s':''}" data-a="tp" data-v="${i}">${o}</button>`).join('')+`<div class="out">Selected ${s.length} of ${q.k}</div>`}
+ if(q.t=='b'){const a=v||[];b=`<div class="g">${q.o.map((o,i)=>`<label>${o}<input type="number" min="0" step="50" data-b="${i}" value="${E(a[i])}"></label>`).join('')}</div><div class="out" id="bt">Total ₹${sum(a)} crore of 1,000 · left ₹${1000-sum(a)}</div>`}
+ if(q.t=='w')b=`<textarea data-w="60" data-q="memo" aria-label="Memo">${E(st.a.memo)}</textarea><div class="k" id="wcm">${wc(st.a.memo)} / 60 words</div>`;
+ return `<div class="card"><div class="k">${n==NQ+1?'FINAL MEMO · 12 MARKS (JUDGED)':'TRIAL '+n+' OF '+NQ+' · '+q.m+' MARKS'}</div><h2>${q.h}</h2><p style="margin:0 0 8px">${q.q}</p>${b}${st.err?`<p style="color:#ff9b9b">${st.err}</p>`:''}<div class="row"><span class="k">Numbers are in the case file</span><button class="p" data-a="sub">${q.t=='w'?'Send memo and face the final blow':'Strike with this answer'}</button></div></div>`}
+function main(){const q=st.q<=NQ?QS[st.q]:0,ph=st.ph,r=RD[Math.min(3,q?q.r:3)];
+ if(st.sc==0)return `<div class="arena"><div class="fg L enter">${CMD}COMMANDER</div><div class="fg R enter">${titan(0)}CRONUS</div></div><div class="card" style="text-align:center"><div class="k">WAZIR · COTY 2027 ROUND 2</div><h1>TRIAL OF TITANS</h1><p>Eight decisions. Eight crises. Fifteen minutes. IndiGo, India’s largest airline, in a hard year. Four Titans stand between you and the skies. Marks are hidden.</p><div style="max-width:380px;margin:12px auto;text-align:left"><label for="tn">Team name</label><input id="tn" maxlength="30" autocomplete="off"><label for="tc" style="display:block;margin-top:8px">Team code</label><input id="tc" maxlength="12" autocomplete="off"></div><button class="p" data-a="enter">Begin the trial</button></div>`;
+ if(st.sc==1)return say('q','THE QUEEN OF ITHACA','Commander, for years IndiGo has been India’s clear market leader: 65% of domestic passengers in August 2026 and the most punctual of the big carriers. Yet FY26 ended in a reported loss, fuel costs have jumped, and December 2025 still shapes how passengers and crew feel. The Board has appointed your team as external consultants. Recommend decisions that restore profitability and trust over 12 months.')+`<div class="card"><div class="k">HOW THE TRIAL WORKS</div><ul style="margin:6px 0 0;padding-left:20px"><li>One team, one answer per question. Use only the casebook and the dossier.</li><li>After every answer a <b>crisis twist</b> arrives. Pick your response. Earlier choices change what a twist means.</li><li>The four meters show consequences, not marks. Calculators allowed. 1 crore = 10 million.</li><li>The whole simulation closes automatically at <b>15 minutes</b>.</li><li>Market data is public (to Oct 2026). Route data and the ₹1,000 crore fund are illustrative. A student simulation, not endorsed by the company.</li></ul><div class="row"><span></span><button class="p" data-a="go1">Start the clock</button></div></div>`;
+ if(st.sc==3)return `<div class="card" style="text-align:center"><div class="k">${st.good?'THE SKIES HOLD':'THE TITANS PRESS ON'}</div><h2>${st.good?'The Titans retreat. Olympus keeps the skies.':'The Titans are driven back, but the war is not over.'}</h2><p>Time taken: ${fmt(Math.round((st.end-st.t0)/1000))}. The judges will announce the Consultant of the Year at the ceremony. Copy your seal and give it to the organisers. Do not close this page until they confirm.</p><textarea id="sc" readonly style="min-height:90px">${st.out}</textarea><div class="row" style="justify-content:center"><span id="cp"></span><button class="p" data-a="copy">Copy seal</button></div></div>`;
+ if(ph=='ri')return say('q','ROUND '+(q.r+1)+' · '+r.n.toUpperCase(),r.l+` <b>${r.t}</b>, ${r.s}, enters the field.`)+`<div class="row"><span></span><button class="p" data-a="face">Face ${r.t}</button></div>`;
+ if(ph=='q')return qcard();
+ if(ph=='bt')return say('c','THE COMMANDER','Striking now…')+'<div class="alert" style="margin-top:12px">COMMITTING</div>';
+ if(ph=='tw'){const t=TW[st.q];return `<div class="alert" style="margin-top:12px">CRISIS · NEW DEVELOPMENT</div>`+say('c','THE COMMANDER REPORTS',t.x+CX[st.q](st.a))+`<div class="card">${t.o.map((o,i)=>`<button class="opt" data-a="tw" data-v="${i}">Response ${i+1}. ${o}</button>`).join('')}</div>`}
+ if(ph=='rx'){const d=st.dsum;return say('c','THE COMMANDER',d>=8?'The Titan reels. The line holds.':d>=0?'We took a glancing blow, but we are standing.':'That hurt. The Titan struck back.')+`<div class="card"><div class="k">CONSEQUENCES</div>${st.chips}<div class="row"><span></span><button class="p" data-a="nx">${st.q==NQ-1?'To the final memo':st.q%2==1?'Round complete: onward':'Next trial'}</button></div></div>`}
+ return ''}
+function render(){$('#app').innerHTML=head()+(st.sc==2?`<div class="lay"><div class="mc">${meters()}${arena()}${main()}</div>${side()}</div>`:main())+(st.dos?dossier():'')+'<div class="note">Trial of Titans · Wazir, the Strategy and Consulting Club</div>';st.en=0;tick()}
+function tick(){if(st.sc!=2)return;const r=TL-Math.round((Date.now()-st.t0)/1000),e=$('#tm');if(e)e.textContent=fmt(Math.max(0,r));if(r<=0)fin(1)}
+function go(f){if(f)f();render();scrollTo(0,0)}
+function flash(){document.body.classList.remove('flash');void document.body.offsetWidth;document.body.classList.add('flash')}
+function chk(){const q=QS[st.q],id='q'+(st.q+1),v=q.t=='w'?st.a.memo:st.a[id];
+ if(q.t=='m'&&v==null)return 'Choose an option.';if(q.t=='n'&&(v===undefined||v===''))return 'Enter a number.';
+ if(q.t=='p'&&(st.pk[id]||[]).length!=q.k)return 'Select exactly '+q.k+'.';
+ if(q.t=='b'&&sum(v)!=1000)return 'The allocation must total exactly ₹1,000 crore (now ₹'+sum(v)+').';
+ if(q.t=='w'&&(!(v||'').trim()||wc(v)>60))return 'Write a memo of 60 words or fewer.';return ''}
+function fin(to){if(st.sc==3)return;if(to)L('timeout',1);L('end',1);st.end=Date.now();clearInterval(st.tid);st.good=sum(st.m)/4>=60;
+ const j=JSON.stringify({t:st.team,c:st.code,s:new Date(st.t0).toISOString(),e:new Date(st.end).toISOString(),x:Math.round((st.end-st.t0)/1000),l:st.log});
+ st.out=btoa(unescape(encodeURIComponent(j)))+'.'+hs(j+'tot27c');st.sc=3;st.fx='';render();scrollTo(0,0)}
+function enterQ(){const q=QS[st.q];st.ph=st.q%2==0&&st.q<NQ?'ri':'q';if(st.ph=='ri'){st.hp=100;st.en=1}else if(st.q==12)st.en=0;st.fx='';st.err=''}
+const A={
+ enter(){const n=$('#tn').value.trim();if(!n){$('#tn').focus();return}st.team=n;st.code=$('#tc').value.trim();go(()=>{st.sc=1})},
+ go1(){st.t0=Date.now();L('start',1);st.tid=setInterval(tick,1000);go(()=>{st.sc=2;st.q=0;enterQ()})},
+ face(){go(()=>{st.ph='q'})},
+ dos(){st.dos=!st.dos;const y=scrollY;render();scrollTo(0,y)},
+ pick(v){st.a['q'+(st.q+1)]=+v;const y=scrollY;render();scrollTo(0,y)},
+ tp(v){const id='q'+(st.q+1),s=st.pk[id]=st.pk[id]||[],i=s.indexOf(+v),k=QS[st.q].k;if(i>=0)s.splice(i,1);else if(s.length<k)s.push(+v);const y=scrollY;render();scrollTo(0,y)},
+ sub(){const e=chk();if(e){st.err=e;const y=scrollY;render();scrollTo(0,y);return}
+  const q=QS[st.q],id='q'+(st.q+1);let v=st.a[id];if(q.t=='n'){v=+v;st.a[id]=v;if(st.a[id+'w'])L(id+'w',st.a[id+'w'])}if(q.t=='p')v=st.pk[id].slice().sort();if(q.t=='b')v=Array.from({length:5},(_,i)=>+v[i]||0);if(q.t=='w'){v=st.a.memo;L('memo',v);st.fx='strike';st.ph='bt';render();flash();setTimeout(()=>fin(0),1500);return}
+  L(id,v);st.hp=Math.max(8,st.hp-24);st.fx='strike';st.ph='bt';render();flash();setTimeout(()=>{st.fx='';st.ph='tw';render();scrollTo(0,0)},1500)},
+ tw(v){v=+v;const d=TW[st.q].d[v],old=st.m.slice();L('tw'+(st.q+1),v+1);st.mp=old;st.m=old.map((x,i)=>Math.max(0,Math.min(100,x+d[i]*1.5)));st.dsum=sum(d);
+  st.chips=d.map((x,i)=>x?`<span class="dl" style="animation-delay:${i*.2}s">${MN[i]} ${x>0?'+':''}${Math.round(x*1.5)}</span>`:'').join('')||'<span class="dl">No lasting change</span>';
+  st.hp=Math.max(6,st.hp-Math.max(0,Math.min(20,st.dsum)));st.fx=st.dsum>=0?'stag':'hit';st.ph='rx';render();flash();requestAnimationFrame(()=>setTimeout(()=>st.m.forEach((x,i)=>{const e=$('#m'+i);if(e)e.style.width=x+'%'}),60));st.mp=st.m.slice()},
+ nx(){go(()=>{st.q++;enterQ()})},
+ copy(){const e=$('#sc');e.select();let ok=0;try{ok=document.execCommand('copy')}catch(x){}const m=()=>{$('#cp').textContent=ok?'Copied.':'Select the code and copy it.'};if(navigator.clipboard)navigator.clipboard.writeText(e.value).then(()=>{ok=1;m()}).catch(m);else m()}};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&!b.disabled)A[b.dataset.a](b.dataset.v)});
+document.addEventListener('input',e=>{const t=e.target,d=t.dataset;if(d.b!=null){const a=st.a['q'+(st.q+1)]=st.a['q'+(st.q+1)]||[];a[+d.b]=t.value;$('#bt').textContent='Total ₹'+sum(a)+' crore of 1,000 · left ₹'+(1000-sum(a));return}
+ if(d.q){st.a[d.q]=t.value;if(d.w){const o=$('#wcm'),n=wc(t.value);o.textContent=n+' / 60 words';o.style.color=n>60?'#ff9b9b':''}}});
+bg();render();
+</script>
+</body>
+</html>
