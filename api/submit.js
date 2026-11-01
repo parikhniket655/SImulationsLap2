@@ -219,6 +219,6 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error('[submit]', err);
-    return res.status(500).json({ ok: false, error: 'Server error saving submission.' });
+    return res.status(500).json({ ok: false, error: 'Server error saving submission: ' + (err.message || String(err)) });
   }
 }
