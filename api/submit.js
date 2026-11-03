@@ -6,7 +6,7 @@
  * - 8 questions at 8 marks each = 64 marks
  * - 8 crisis twists at 3 / 1 / 0 marks = 24 marks
  * Total Auto Score = 88 marks
- * - Speed bonus (up to 1 mark for tie-breaks): 1 - time / 900
+ * - Speed bonus (up to 1 mark for tie-breaks): 1 - time / 1200
  * Saves full submission to Supabase.
  */
 
@@ -172,8 +172,8 @@ function autoScore(answers, crises, timeTakenSeconds) {
   const questionTotal = q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8;
   const rawAuto = questionTotal + twistScore; // out of 88
 
-  // Speed tie-breaker point (up to 1 point): 1 - time / 900
-  const speedPoint = timeTakenSeconds ? Math.max(0, Math.min(1, 1 - (timeTakenSeconds / 900))) : 0;
+  // Speed tie-breaker point (up to 1 point): 1 - time / 1200
+  const speedPoint = timeTakenSeconds ? Math.max(0, Math.min(1, 1 - (timeTakenSeconds / 1200))) : 0;
   const roundedAuto = Math.round((rawAuto + speedPoint) * 100) / 100;
 
   const breakdown = {
